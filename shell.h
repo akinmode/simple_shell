@@ -8,5 +8,7 @@
 #include <sys/wait.h>
 
 /* PROTOTYPES */
-
+char *_sh_input(void);
+char **_sh_tokens(char *command);
+int _sh_tokens_count(char *command,  char *delim);
 #endif
