@@ -9,7 +9,7 @@
 
 int main(int argc, char **argv)
 {
-	char *command, *command_cpy, **tokens, *delim = "\n";
+	char *command, *command_cpy, **tokens, *delim = " \n";
 	int tokens_c, status;
 	pid_t apid;
 	(void) argc;
@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 	do {
 		command = NULL, command_cpy = NULL, tokens = NULL, tokens_c = 0;
 
-		printf("#cisfun$ ");
+		printf("$ ");
 		command = _sh_input();
 		command_cpy = strdup(command);
 		tokens_c = _sh_tokens_count(command_cpy, delim);
