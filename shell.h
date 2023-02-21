@@ -9,6 +9,6 @@
 
 /* PROTOTYPES */
 char *_sh_input(void);
-char **_sh_tokens(char *command, char *delim, int arrsize);
+void _sh_tokens(char *arr[], char *command, char *delim);
 int _sh_tokens_count(char *command,  char *delim);
 #endif

@@ -9,20 +9,21 @@
 
 int main(int argc, char **argv)
 {
-	char *command, **tokens, *delim = "\n";
+	char *command, *command_cpy, **tokens, *delim = " \n";
 	int tokens_c, status;
 	pid_t apid;
 	(void) argc;
 
 	do {
-		command = NULL, tokens = NULL;
-		tokens_c = 0;
+		command = NULL, command_cpy = NULL, tokens = NULL, tokens_c = 0;
 
 		printf("$ ");
 		command = _sh_input();
-		tokens_c = _sh_tokens_count(command, delim);
-		tokens = _sh_tokens(command, delim, tokens_c);
-
+		command_cpy = strdup(command);
+		tokens_c = _sh_tokens_count(command_cpy, delim);
+		tokens = (char **) malloc(sizeof(char *) * (tokens_c + 1));
+		if (tokens)
+			_sh_tokens(tokens, command, delim);
 		apid = fork();
 		if (apid == -1)
 		{
@@ -41,8 +42,7 @@ int main(int argc, char **argv)
 		{
 			wait(&status);
 		}
-
-		free(command), free(tokens);
+		free(command), free(command_cpy), free(tokens);
 	} while (1);
 	return (0);
 }
@@ -97,27 +97,22 @@ int _sh_tokens_count(char *command, char *delim)
 /**
  * _sh_tokens - generates tokens
  * from the command line input
+ * @arr: array of pointer of tokens to e generated
  * @command: input string command
  * @delim: delimiter
- * @arrsize: array size
  * Return: array of token pointers
 */
-
-char **_sh_tokens(char *command, char *delim, int arrsize)
+void _sh_tokens(char *arr[], char *command, char *delim)
 {
-	char **tokens = NULL;
-	char *token = NULL;
+	char *token;
 	int ind = 0;
 
-	tokens = malloc(sizeof(char *) * (arrsize + 1));
 	token = strtok(command, delim);
 	while (token)
 	{
-		tokens[ind] = token;
-		token = NULL;
+		arr[ind] = token;
+		token = strtok(NULL, delim);
 		ind++;
 	}
-	tokens[ind] = NULL;
-
-	return (tokens);
+	arr[ind] = NULL;
 }
