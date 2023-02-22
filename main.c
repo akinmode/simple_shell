@@ -12,6 +12,8 @@ int main(int argc, char **argv)
 	do {
 		char *command = NULL, *delim = " \n";
 		char **tokens = NULL;
+		int status;
+		pid_t apid;
 		argc = 0;
 
 		printf("$ ");
@@ -20,8 +22,25 @@ int main(int argc, char **argv)
 		tokens = (char **) malloc(sizeof(char *) * (argc));
 		if (tokens)
 			_sh_tokens(tokens, command, delim);
-		printf("%d\n", argc);
-		printf("%s\n", argv[0]);
+
+		apid = fork();
+		if (apid == -1)
+		{
+			perror("Error");
+			return (1);
+		}
+		else if (apid == 0)
+		{
+			if (execve(tokens[0], tokens, NULL) == -1)
+			{
+				perror(argv[0]);
+				return (1);
+			}
+		}
+		else
+		{
+			wait(&status);
+		}
 
 		
 		free(command), free(tokens);

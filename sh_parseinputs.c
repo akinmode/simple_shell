@@ -37,7 +37,7 @@ void _sh_tokens_count(int *argc, char *command, char *delim)
 	char *token = NULL, *command_cpy = NULL;
 
 	command_cpy = strdup(command);
-	token = strtok(command, delim);
+	token = strtok(command_cpy, delim);
 	(*argc)++;
 	while (token)
 	{
@@ -55,6 +55,7 @@ void _sh_tokens_count(int *argc, char *command, char *delim)
  * @delim: delimiter
  * Return: array of token pointers
 */
+
 void _sh_tokens(char *arr[], char *command, char *delim)
 {
 	char *token;
