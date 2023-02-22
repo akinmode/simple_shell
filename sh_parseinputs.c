@@ -17,7 +17,7 @@ char *_sh_input(void)
 		}
 		else
 		{
-			perror("No such file or directory");
+			perror("command not found");
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -32,18 +32,19 @@ char *_sh_input(void)
  * Return: integer count
 */
 
-int _sh_tokens_count(char *command, char *delim)
+void _sh_tokens_count(int *argc, char *command, char *delim)
 {
-	char *token = NULL;
-	int tokens_c = 0;
+	char *token = NULL, *command_cpy = NULL;
 
+	command_cpy = strdup(command);
 	token = strtok(command, delim);
+	(*argc)++;
 	while (token)
 	{
 		token = strtok(NULL, delim);
-		tokens_c++;
+		(*argc)++;
 	}
-	return (tokens_c);
+	free(command_cpy);
 }
 
 /**
