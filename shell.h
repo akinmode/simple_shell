@@ -11,4 +11,6 @@
 char *_sh_input(void);
 void _sh_tokens(char *arr[], char *command, char *delim);
 void _sh_tokens_count(int *argc, char *command, char *delim);
+int _sh_execute(char **argv);
+char *checkPath(char *command);
 #endif

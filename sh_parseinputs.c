@@ -70,3 +70,34 @@ void _sh_tokens(char *arr[], char *command, char *delim)
 	}
 	arr[ind] = NULL;
 }
+
+/**
+ * _sh_execute - Executes the command
+ * @argv: tokenized array
+ * Return: failure or success
+*/
+
+int _sh_execute(char **argv)
+{
+	pid_t apid;
+
+	apid = fork();
+	if (apid == -1)
+	{
+		perror("Error");
+		return (EXIT_FAILURE);
+	}
+	else if (apid == 0)
+	{
+		if (execve(argv[0], argv, NULL) == -1)
+		{
+			perror(argv[0]);
+			return (EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		wait(0);
+	}
+	return (0);
+}
