@@ -9,8 +9,9 @@
 
 /* PROTOTYPES */
 char *_sh_input(void);
-void _sh_tokens(char *arr[], char *command, char *delim);
+char **_sh_tokens(char *command, char *delim, int arrsize);
 void _sh_tokens_count(int *argc, char *command, char *delim);
 int _sh_execute(char **argv);
-char *checkPath(char *command);
+char *_sh_paths(char *paths, char *command);
+void free_array(char **arr);
 #endif

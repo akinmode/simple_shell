@@ -1,13 +1,13 @@
 #include "shell.h"
+
 /**
  * _sh_input - gets the command line input
  * Return: 0 on success or -1 on failure
 */
-
 char *_sh_input(void)
 {
 	char *command = NULL;
-	size_t n = 0;
+	size_t n;
 
 	if (getline(&command, &n, stdin) == -1)
 	{
@@ -20,6 +20,7 @@ char *_sh_input(void)
 			perror("command not found");
 			exit(EXIT_FAILURE);
 		}
+		free(command);
 	}
 	return (command);
 }
@@ -27,11 +28,11 @@ char *_sh_input(void)
 /**
  * _sh_tokens_count - counts the possible tokens
  * from the command line input
+ * @argc: counnt of tokens from command split
  * @command: input string command
  * @delim: delimiter
  * Return: integer count
 */
-
 void _sh_tokens_count(int *argc, char *command, char *delim)
 {
 	char *token = NULL, *command_cpy = NULL;
@@ -50,25 +51,33 @@ void _sh_tokens_count(int *argc, char *command, char *delim)
 /**
  * _sh_tokens - generates tokens
  * from the command line input
- * @arr: array of pointer of tokens to e generated
  * @command: input string command
  * @delim: delimiter
+ * @arrsize: array size
  * Return: array of token pointers
 */
-
-void _sh_tokens(char *arr[], char *command, char *delim)
+char **_sh_tokens(char *command, char *delim, int arrsize)
 {
-	char *token;
-	int ind = 0;
+	char **arr = NULL, *token = NULL, *argpath = NULL;
+	int idx = 0;
 
+	arr = (char **) malloc(sizeof(char *) * (arrsize));
 	token = strtok(command, delim);
 	while (token)
 	{
-		arr[ind] = token;
+		arr[idx] = malloc(sizeof(char) * (strlen(token) + 1));
+		strcpy(arr[idx], token);
 		token = strtok(NULL, delim);
-		ind++;
+		idx++;
 	}
-	arr[ind] = NULL;
+	arr[idx] = NULL;
+	/* Check path for the input command */
+	argpath = _sh_paths("PATH", arr[0]);
+	if (argpath != NULL)
+	{
+		arr[0] = argpath;
+	}
+	return (arr);
 }
 
 /**
@@ -100,4 +109,46 @@ int _sh_execute(char **argv)
 		wait(0);
 	}
 	return (0);
+}
+
+/**
+ * _sh_paths - checks for the existing executables
+ * @paths: environment paths
+ * @command: first command
+ * Return: NULL or Full path of program
+*/
+
+char *_sh_paths(char *paths, char *command)
+{
+	char *token, *delim = ":", *path_cpy;
+
+	if (access(command, X_OK) != -1)
+	{
+		return (command);
+	}
+	else
+	{
+		path_cpy = strdup(getenv(paths));
+		token = strtok(path_cpy, delim);
+		while (token)
+		{
+			char *newpath = NULL;
+
+			newpath = malloc(sizeof(char) * (strlen(token) + strlen(command) + 2));
+			if (newpath != NULL)
+			{
+				strcpy(newpath, token);
+				strcat(newpath, "/");
+				strcat(newpath, command);
+				if (access(newpath, F_OK) != -1 && access(newpath, X_OK) != -1)
+				{
+					return (newpath);
+				}
+			}
+			token = strtok(NULL, delim);
+			free(newpath);
+		}
+		free(path_cpy);
+	}
+	return (NULL);
 }
