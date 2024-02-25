@@ -4,34 +4,24 @@
  * main -  a simple UNIX command interpreter.
  * Return: 0 on success or -1 on failure
 */
-int main(void)
+int main(int argc, char **argv)
 {
     while (1)
     {
-		char *command = NULL, *delim = " \n", *token;
-		char **cmd_array;
-		int i = 0, n = 1, p;
+		char *command = NULL, *delim = " \n";
+		int i = 0;
 
         write(1, "#cisfun$ ", 9);
-        /*getline(&buffer, &buffer_size, stdin);*/
 		command = _sh_input();
-		token = strtok(command, delim);
-		cmd_array = malloc(sizeof(char *) * 1024);
-
-		while (token)
+		argv = _sh_tokens(&argc, command, delim);
+		
+		while (i < argc)
 		{
-			cmd_array[i] = token;
-			token = strtok(NULL, delim);
+			printf("%s\n", argv[i]);
 			i++;
 		}
-		cmd_array[i] = NULL;
-
-		for (p = 0; p < n; p++)
-		{
-			printf("%s\n", cmd_array[p]);
-		}
 		free(command);
-		free(cmd_array);
+		free(argv);
     }
     return (0);
 }
