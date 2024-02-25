@@ -6,19 +6,19 @@
 */
 int main(int argc, char **argv)
 {
+	char *sys;
+	sys = argv[0];
+
     while (1)
     {
 		char *command = NULL, *delim = " \n";
-		int i = 0;
 
         write(1, "#cisfun$ ", 9);
-		command = _sh_input();
+		command = _sh_input(sys);
 		argv = _sh_tokens(&argc, command, delim);
-		
-		while (i < argc)
+		if (_sh_execute(sys, argv) == -1)
 		{
-			printf("%s\n", argv[i]);
-			i++;
+			perror(sys);
 		}
 		free(command);
 		free(argv);

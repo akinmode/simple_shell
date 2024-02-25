@@ -4,7 +4,7 @@
  * _sh_input - gets the command line input
  * Return: 0 on success or -1 on failure
 */
-char *_sh_input(void)
+char *_sh_input(char *shell)
 {
     char *buffer = NULL;
     size_t buffer_size = 0;
@@ -17,7 +17,7 @@ char *_sh_input(void)
 		}
 		else
 		{
-			perror("No such file or directory");
+			perror(shell);
 			exit(EXIT_FAILURE);
 		}
 		free(buffer);
@@ -53,3 +53,21 @@ char *_sh_input(void)
     cmd_array[i] = NULL;
     return (cmd_array);
 }
+
+/**
+ * _sh_execute - Executes the command
+ * @shell: name of the executing shell
+ * @argv: tokenized array
+ * Return: failure or success
+*/
+
+int _sh_execute(char *shell, char **argv)
+{
+    if (execve(argv[0], argv, NULL) == -1)
+    {
+        perror(shell);
+        return (EXIT_FAILURE);
+    }
+    return (EXIT_SUCCESS);
+}
+

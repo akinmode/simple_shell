@@ -8,8 +8,8 @@
 #include <sys/wait.h>
 
 /* PROTOTYPES */
-char *_sh_input(void);
+char *_sh_input(char *shell);
 char **_sh_tokens(int *argc, char *command, char *delim);
-int _sh_execute(char **argv);
-/*char **_sh_tokens(char *command, char *delim, int arrsize);*/
+int _sh_execute(char *shell, char **argv);
+
 #endif
