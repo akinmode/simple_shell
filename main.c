@@ -9,13 +9,12 @@ int main(void)
 {
 	int status;
 
-    while (1)
-    {
+	while (1)
+	{
 		char *command = NULL;
 
-        write(STDOUT_FILENO, "$ ", 2);
+		write(STDOUT_FILENO, "$ ", 2);
 		command = _sh_input();
-		
 		if (command == NULL)
 		{
 			write(STDOUT_FILENO, "\n", 1);
@@ -27,6 +26,6 @@ int main(void)
 			printf("%d\n", status);
 		}
 		free(command);
-    }
-    return (0);
+	}
+	return (0);
 }

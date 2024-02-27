@@ -6,16 +6,16 @@
 */
 char *_sh_input()
 {
-    char *buffer = NULL;
-    size_t buffer_size = 0;
-    
+	char *buffer = NULL;
+	size_t buffer_size = 0;
+
 	if (getline(&buffer, &buffer_size, stdin) == -1)
 	{
-        if (feof(stdin))
-        {
-            free(buffer);
-            return (NULL);
-        } 
+		if (feof(stdin))
+		{
+			free(buffer);
+			return (NULL);
+		}
 		exit(EXIT_FAILURE);
 	}
 	return (buffer);
@@ -30,24 +30,24 @@ char *_sh_input()
  * @delim: delimiter
  * Return: integer count
 */
- char **_sh_tokens(int *argc, char *command, char *delim)
+char **_sh_tokens(int *argc, char *command, char *delim)
 {
-    char **cmd_array, *token;
-    int i = 0;
-    (*argc) = 0;
-    
-    cmd_array = malloc(sizeof(char *) * 1024);
+	char **cmd_array, *token;
+	int i = 0;
+	(*argc) = 0;
 
-    token = strtok(command, delim);
-    while (token)
-    {
-        (*argc)++;
-        cmd_array[i] = token;
-        token = strtok(NULL, delim);
-        i++;
-    }
-    cmd_array[i] = NULL;
-    return (cmd_array);
+	cmd_array = malloc(sizeof(char *) * 1024);
+
+	token = strtok(command, delim);
+	while (token)
+	{
+		(*argc)++;
+		cmd_array[i] = token;
+		token = strtok(NULL, delim);
+		i++;
+	}
+	cmd_array[i] = NULL;
+	return (cmd_array);
 }
 
 /**
@@ -56,19 +56,18 @@ char *_sh_input()
  * @argv: tokenized array
  * Return: failure or success
 */
-
 int _sh_execute(char *command)
 {
-    char **cmd;
-    int cargs;
+	char **cmd;
+	int cargs;
 
-    cmd = _sh_tokens(&cargs, command, " \n");
-    printf("%d\n", cargs);
-    if (cargs > 1)
-        return (-1);
-    if (execve(cmd[0], cmd, NULL) == -1)
-    {
-        perror("Error");
-    }
-    return (0);
+	cmd = _sh_tokens(&cargs, command, " \n");
+	printf("%d\n", cargs);
+	if (cargs > 1)
+		return (-1);
+	if (execve(cmd[0], cmd, NULL) == -1)
+	{
+		perror("Error");
+	}
+	return (0);
 }
