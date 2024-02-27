@@ -7,8 +7,6 @@
 */
 int main(void)
 {
-	int status;
-
 	while (1)
 	{
 		char *command = NULL;
@@ -22,8 +20,7 @@ int main(void)
 		}
 		else
 		{
-			status = _sh_execute(command);
-			printf("%d\n", status);
+			_sh_execute(command);
 		}
 		free(command);
 	}

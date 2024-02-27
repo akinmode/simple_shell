@@ -62,9 +62,6 @@ int _sh_execute(char *command)
 	int cargs;
 
 	cmd = _sh_tokens(&cargs, command, " \n");
-	printf("%d\n", cargs);
-	if (cargs > 1)
-		return (-1);
 	if (execve(cmd[0], cmd, NULL) == -1)
 	{
 		perror("Error");
