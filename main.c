@@ -1,27 +1,32 @@
 #include "shell.h"
 
 /**
- * main -  a simple UNIX command interpreter.
- * Return: 0 on success or -1 on failure
+ * main -  a simple UNIX command interpreter
+ * and entry point
+ * Return: Always 0.
 */
-int main(int argc, char **argv)
+int main(void)
 {
-	char *sys;
-	sys = argv[0];
+	int status;
 
     while (1)
     {
-		char *command = NULL, *delim = " \n";
+		char *command = NULL;
 
-        write(1, "#cisfun$ ", 9);
-		command = _sh_input(sys);
-		argv = _sh_tokens(&argc, command, delim);
-		if (_sh_execute(sys, argv) == -1)
+        write(STDOUT_FILENO, "$ ", 2);
+		command = _sh_input();
+		
+		if (command == NULL)
 		{
-			perror(sys);
+			write(STDOUT_FILENO, "\n", 1);
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			status = _sh_execute(command);
+			printf("%d\n", status);
 		}
 		free(command);
-		free(argv);
     }
     return (0);
 }

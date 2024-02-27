@@ -4,23 +4,19 @@
  * _sh_input - gets the command line input
  * Return: 0 on success or -1 on failure
 */
-char *_sh_input(char *shell)
+char *_sh_input()
 {
     char *buffer = NULL;
     size_t buffer_size = 0;
-
+    
 	if (getline(&buffer, &buffer_size, stdin) == -1)
 	{
-		if (feof(stdin))
-		{
-			exit(EXIT_SUCCESS);
-		}
-		else
-		{
-			perror(shell);
-			exit(EXIT_FAILURE);
-		}
-		free(buffer);
+        if (feof(stdin))
+        {
+            free(buffer);
+            return (NULL);
+        } 
+		exit(EXIT_FAILURE);
 	}
 	return (buffer);
 }
@@ -61,13 +57,18 @@ char *_sh_input(char *shell)
  * Return: failure or success
 */
 
-int _sh_execute(char *shell, char **argv)
+int _sh_execute(char *command)
 {
-    if (execve(argv[0], argv, NULL) == -1)
-    {
-        perror(shell);
-        return (EXIT_FAILURE);
-    }
-    return (EXIT_SUCCESS);
-}
+    char **cmd;
+    int cargs;
 
+    cmd = _sh_tokens(&cargs, command, " \n");
+    printf("%d\n", cargs);
+    if (cargs > 1)
+        return (-1);
+    if (execve(cmd[0], cmd, NULL) == -1)
+    {
+        perror("Error");
+    }
+    return (0);
+}
