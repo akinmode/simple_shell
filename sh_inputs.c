@@ -52,19 +52,19 @@ char **_sh_tokens(int *argc, char *command, char *delim)
 
 /**
  * _sh_execute - Executes the command
- * @shell: name of the executing shell
- * @argv: tokenized array
+ * @shell: name of program
+ * @argc: argument count
+ * @command: input from shell
  * Return: failure or success
 */
-int _sh_execute(char *command)
+int _sh_execute(char *shell, int *argc, char *command)
 {
 	char **cmd;
-	int cargs;
 
-	cmd = _sh_tokens(&cargs, command, " \n");
+	cmd = _sh_tokens(argc, command, " \n");
 	if (execve(cmd[0], cmd, NULL) == -1)
 	{
-		perror("Error");
+		perror(shell);
 	}
 	return (0);
 }

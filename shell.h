@@ -10,6 +10,6 @@
 /* PROTOTYPES */
 char *_sh_input();
 char **_sh_tokens(int *argc, char *command, char *delim);
-int _sh_execute(char *command);
+int _sh_execute(char *shell, int *argc, char *command);
 
 #endif

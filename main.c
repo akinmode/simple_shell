@@ -5,8 +5,11 @@
  * and entry point
  * Return: Always 0.
 */
-int main(void)
+int main(int argc, char **argv)
 {
+	char *sys;
+
+	sys = argv[0];
 	while (1)
 	{
 		char *command = NULL;
@@ -20,7 +23,7 @@ int main(void)
 		}
 		else
 		{
-			_sh_execute(command);
+			_sh_execute(sys, &argc, command);
 		}
 		free(command);
 	}
